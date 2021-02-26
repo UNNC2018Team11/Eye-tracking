@@ -49,7 +49,6 @@ class GazeTracking(object):
             self.eye_left = Eye(frame, landmarks, 0, self.calibration)
             self.eye_right = Eye(frame, landmarks, 1, self.calibration)
 
-
         except IndexError:
             self.eye_left = None
             self.eye_right = None
@@ -65,9 +64,35 @@ class GazeTracking(object):
 
     def left_gaze(self):
         if self.pupils_located:
-            x = round(1920/self.eye_left.eye_weight * (self.eye_left.pupil.x), 2)
-            y = round(1080/self.eye_left.eye_height * (self.eye_left.pupil.y), 2)
+            x = round(1920 / self.eye_left.eye_weight * self.eye_left.pupil.x, 2)
+            y = round(1080 / self.eye_left.eye_height * self.eye_left.pupil.y, 2)
             return (x, y)
+
+    def left_gaze_x(self):
+        if self.pupils_located:
+            x = round(1920 / self.eye_left.eye_weight * self.eye_left.pupil.x, 2)
+            return x
+
+    def left_gaze_y(self):
+        if self.pupils_located:
+            y = round(1080 / self.eye_left.eye_height * self.eye_left.pupil.y, 2)
+            return y
+
+    # def right_gaze(self):
+    #     if self.pupils_located:
+    #         x = round(1920 / self.eye_right.eye_weight * self.eye_right.pupil.x, 2)
+    #         y = round(1080 / self.eye_right.eye_height * self.eye_right.pupil.y, 2)
+    #         return (x, y)
+
+    def right_gaze_x(self):
+        if self.pupils_located:
+            x = round(1920 / self.eye_right.eye_weight * self.eye_right.pupil.x, 2)
+            return x
+
+    def right_gaze_y(self):
+        if self.pupils_located:
+            y = round(1080 / self.eye_right.eye_height * self.eye_right.pupil.y, 2)
+            return y
 
     def pupil_left_coords(self):
         """Returns the coordinates of the left pupil"""
@@ -135,17 +160,19 @@ class GazeTracking(object):
         if self.pupils_located:
             color = (0, 255, 0)
             # x_left, y_left = self.pupil_left_coords()
-            x_left, y_left = self.eye_left.origin[0] + self.eye_left.pupil.x, self.eye_left.origin[1] + self.eye_left.pupil.y
+            x_left, y_left = self.eye_left.origin[0] + self.eye_left.pupil.x, self.eye_left.origin[
+                1] + self.eye_left.pupil.y
             # x_right, y_right = self.pupil_right_coords()
-            x_right, y_right = self.eye_right.origin[0] + self.eye_right.pupil.x, self.eye_right.origin[1] + self.eye_right.pupil.y
+            x_right, y_right = self.eye_right.origin[0] + self.eye_right.pupil.x, self.eye_right.origin[
+                1] + self.eye_right.pupil.y
             cv2.line(frame, (x_left - 5, y_left), (x_left + 5, y_left), color)
             cv2.line(frame, (x_left, y_left - 5), (x_left, y_left + 5), color)
             cv2.line(frame, (x_right - 5, y_right), (x_right + 5, y_right), color)
             cv2.line(frame, (x_right, y_right - 5), (x_right, y_right + 5), color)
 
             (x_point, y_point) = self.left_gaze()
-            x_point = int(x_point/4)
-            y_point = int(460 - y_point/4)
+            x_point = int(x_point / 4)
+            y_point = int(460 - y_point / 4)
             cv2.line(frame, (x_point - 5, y_point), (x_point + 5, y_point), (0, 255, 255))
             cv2.line(frame, (x_point, y_point - 5), (x_point, y_point + 5), (0, 255, 255))
 

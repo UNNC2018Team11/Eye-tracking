@@ -75,8 +75,8 @@ class Eye(object):
         Returns:
             The computed ratio
         """
-        left = (landmarks.part(points[0]).x, landmarks.part(points[0]).y)
-        right = (landmarks.part(points[3]).x, landmarks.part(points[3]).y)
+        left = ((landmarks.part(points[0]).x)+3, landmarks.part(points[0]).y)
+        right = ((landmarks.part(points[3]).x)-3, landmarks.part(points[3]).y)
         top = self._middle_point(landmarks.part(points[1]), landmarks.part(points[2]))
         bottom = self._middle_point(landmarks.part(points[5]), landmarks.part(points[4]))
 
@@ -91,8 +91,8 @@ class Eye(object):
         return ratio
 
     def _show_eye_width(self, landmarks, points):
-        left = (landmarks.part(points[0]).x, landmarks.part(points[0]).y)
-        right = (landmarks.part(points[3]).x, landmarks.part(points[3]).y)
+        left = ((landmarks.part(points[0]).x)+3, landmarks.part(points[0]).y)
+        right = ((landmarks.part(points[3]).x)-3, landmarks.part(points[3]).y)
         top = self._middle_point(landmarks.part(points[1]), landmarks.part(points[2]))
         bottom = self._middle_point(landmarks.part(points[5]), landmarks.part(points[4]))
 
@@ -101,8 +101,8 @@ class Eye(object):
         return eye_width
 
     def _show_eye_height(self, landmarks, points):
-        left = (landmarks.part(points[0]).x, landmarks.part(points[0]).y)
-        right = (landmarks.part(points[3]).x, landmarks.part(points[3]).y)
+        left = (landmarks.part(points[0]).x + 3, landmarks.part(points[0]).y)
+        right = (landmarks.part(points[3]).x - 3, landmarks.part(points[3]).y)
         top = self._middle_point(landmarks.part(points[1]), landmarks.part(points[2]))
         bottom = self._middle_point(landmarks.part(points[5]), landmarks.part(points[4]))
 
