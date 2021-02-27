@@ -7,6 +7,8 @@ import csv
 import time
 
 import cv2
+from numpy import *
+from datetime import datetime
 
 from gaze_tracking import GazeTracking
 
@@ -14,13 +16,25 @@ gaze = GazeTracking()
 webcam = cv2.VideoCapture(0)
 
 path = "aa.csv"
+gaze_point_x = None
+gaze_point_y = None
+init_time = ""
+list_x = []
+list_y = []
 
 
-def write_csv(leftpoint_x, leftpoint_y, currenttime):
+# def average_per_sec(time, x, y):
+#     list_x.append(x)
+#     list_y.append(y)
+#     if time != init_time:
+#         init_time = curtime
+
+
+def write_csv(point_x, point_y, currenttime):
     path = "aa.csv"
     with open(path, 'a+', newline='') as f:
         csv_write = csv.writer(f, lineterminator='\n')
-        data_row = [leftpoint_x, leftpoint_y, currenttime]
+        data_row = [point_x, point_y, currenttime]
         csv_write.writerow(data_row)
 
 
@@ -37,21 +51,21 @@ while True:
     frame = gaze.annotated_frame()
     text = ""
 
-    if gaze.is_blinking():
-        text = "Blinking"
-    elif gaze.is_right():
-        text = "Looking right"
-    elif gaze.is_left():
-        text = "Looking left"
-    elif gaze.is_center():
-        text = "Looking center"
-
-    cv2.putText(frame, text, (90, 60), cv2.FONT_HERSHEY_DUPLEX, 1.6, (147, 58, 31), 2)
-
-    left_pupil = gaze.pupil_left_coords()
-    right_pupil = gaze.pupil_right_coords()
-    cv2.putText(frame, "Left pupil:  " + str(left_pupil), (90, 130), cv2.FONT_HERSHEY_DUPLEX, 0.9, (147, 58, 31), 1)
-    cv2.putText(frame, "Right pupil: " + str(right_pupil), (90, 165), cv2.FONT_HERSHEY_DUPLEX, 0.9, (147, 58, 31), 1)
+    # if gaze.is_blinking():
+    #     text = "Blinking"
+    # elif gaze.is_right():
+    #     text = "Looking right"
+    # elif gaze.is_left():
+    #     text = "Looking left"
+    # elif gaze.is_center():
+    #     text = "Looking center"
+    #
+    # cv2.putText(frame, text, (90, 60), cv2.FONT_HERSHEY_DUPLEX, 1.6, (147, 58, 31), 2)
+    #
+    # left_pupil = gaze.pupil_left_coords()
+    # right_pupil = gaze.pupil_right_coords()
+    # cv2.putText(frame, "Left pupil:  " + str(left_pupil), (90, 130), cv2.FONT_HERSHEY_DUPLEX, 0.9, (147, 58, 31), 1)
+    # cv2.putText(frame, "Right pupil: " + str(right_pupil), (90, 165), cv2.FONT_HERSHEY_DUPLEX, 0.9, (147, 58, 31), 1)
 
     # left_point = gaze.left_gaze()
     # right_point = gaze.right_gaze()
@@ -74,8 +88,19 @@ while True:
 
     curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
     # print("Current time = ", curtime)
+    # date = datetime.strptime(curtime, "%Y-%m-%d %H:%M:%S")
 
-    write_csv(gaze_point_x, gaze_point_y, curtime)
+    list_x.append(gaze_point_x)
+    list_y.append(gaze_point_y)
+    if curtime != init_time:
+        init_time = curtime
+        av_x = mean(list_x)
+        av_y = mean(list_y)
+        write_csv(av_x, av_y, curtime)
+        list_x = []
+        list_y = []
+
+    # write_csv(gaze_point_x, gaze_point_y, curtime)
 
     if cv2.waitKey(1) == 27:
         break
