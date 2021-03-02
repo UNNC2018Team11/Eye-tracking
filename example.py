@@ -28,10 +28,11 @@ watchingTime = [[0] * 24 for i in range(9)]
 
 def countPoints(point_x, point_y):
     if point_x is not None and point_y is not None:
-        a = (int)(point_x/160)
-        b = (int)(point_y/240)
-        print(a)
-        print(b)
+        a = (int)(9-point_x/190)
+        b = (int)(point_x/120)
+        # print(a)
+        # print(b)
+        # print("\n")
         watchingTime[a][b] = watchingTime[a][b]+1
         path = "bb.csv"
         with open(path, 'w', newline='') as f:

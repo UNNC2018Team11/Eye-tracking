@@ -75,8 +75,10 @@ class Eye(object):
         Returns:
             The computed ratio
         """
-        left = ((landmarks.part(points[0]).x)+3, landmarks.part(points[0]).y)
-        right = ((landmarks.part(points[3]).x)-3, landmarks.part(points[3]).y)
+        # left = ((landmarks.part(points[0]).x)+3, landmarks.part(points[0]).y)
+        # right = ((landmarks.part(points[3]).x)-3, landmarks.part(points[3]).y)
+        left = ((landmarks.part(points[0]).x) - 2.6, landmarks.part(points[0]).y - 0.2)
+        right = ((landmarks.part(points[3]).x) + 2.6, landmarks.part(points[3]).y + 0.2)
         top = self._middle_point(landmarks.part(points[1]), landmarks.part(points[2]))
         bottom = self._middle_point(landmarks.part(points[5]), landmarks.part(points[4]))
 
