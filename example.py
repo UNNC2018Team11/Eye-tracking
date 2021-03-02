@@ -23,6 +23,21 @@ list_x = []
 list_y = []
 all_x = []
 all_y = []
+watchingTime = [[0] * 24 for i in range(9)]
+
+
+def countPoints(point_x, point_y):
+    if point_x is not None and point_y is not None:
+        a = (int)(point_x/160)
+        b = (int)(point_y/240)
+        print(a)
+        print(b)
+        watchingTime[a][b] = watchingTime[a][b]+1
+        path = "bb.csv"
+        with open(path, 'w', newline='') as f:
+            csv_write = csv.writer(f, lineterminator='\n')
+            data_row = watchingTime
+            csv_write.writerow(data_row)
 
 
 def read_std_csv():
@@ -112,6 +127,8 @@ while True:
         av_y = round(mean(list_y), 2)
         # write into csv file
         write_csv(av_x, av_y, curtime)
+        # count the times of gazing on different area
+        countPoints(av_x, av_y)
         # initialize lists
         list_x = []
         list_y = []
