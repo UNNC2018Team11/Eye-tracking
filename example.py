@@ -8,7 +8,7 @@ import time
 
 import cv2
 from numpy import *
-from datetime import datetime
+import numpy as np
 
 from gaze_tracking import GazeTracking
 
@@ -21,13 +21,27 @@ gaze_point_y = None
 init_time = ""
 list_x = []
 list_y = []
+all_x = []
+all_y = []
 
 
-# def average_per_sec(time, x, y):
-#     list_x.append(x)
-#     list_y.append(y)
-#     if time != init_time:
-#         init_time = curtime
+def read_std_csv():
+    with open('aa.csv', 'r') as f:
+        reader = csv.reader(f)
+        for i in reader:
+            all_x.append(float(i[0]))
+            all_y.append(float(i[1]))
+    x_std = np.std(all_x)
+    y_std = np.std(all_y)
+    write_std(x_std, y_std)
+
+
+def write_std(x_std, y_std):
+    path = "std.csv"
+    with open(path, 'w+', newline='') as f:
+        csv_write = csv.writer(f, lineterminator='\n')
+        data_row = [x_std, y_std]
+        csv_write.writerow(data_row)
 
 
 def write_csv(point_x, point_y, currenttime):
@@ -74,33 +88,35 @@ while True:
     # left_point_y = gaze.left_gaze_y()
     # right_point_x = gaze.right_gaze_x()
     # right_point_y = gaze.right_gaze_y()
+
+    # if pupils have been detected, calculate the gazing point
     if (gaze.left_gaze_x() is not None and gaze.right_gaze_x() is not None
             and gaze.left_gaze_y() is not None and gaze.right_gaze_y() is not None):
         gaze_point_x = (gaze.left_gaze_x() + gaze.right_gaze_x()) / 2
         gaze_point_y = (gaze.left_gaze_y() + gaze.right_gaze_y()) / 2
-    # gaze_point_x = (left_point_x + right_point_x) / 2
-    # gaze_point_y = (left_point_y + right_point_y) / 2
-    # cv2.putText(frame, "Gaze point:  " + str(left_point), (10, 190), cv2.FONT_HERSHEY_DUPLEX, 0.9, (255, 255, 255), 1)
 
     cv2.namedWindow("Demo", 0)
     cv2.resizeWindow("Demo", 1920, 1080)
     cv2.imshow("Demo", frame)
 
+    # get the current time
     curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-    # print("Current time = ", curtime)
-    # date = datetime.strptime(curtime, "%Y-%m-%d %H:%M:%S")
 
+    # store coordinates in one second
     list_x.append(gaze_point_x)
     list_y.append(gaze_point_y)
+    # if pass to the next sec, calculate the mean of stored coordinates
     if curtime != init_time:
         init_time = curtime
-        av_x = mean(list_x)
-        av_y = mean(list_y)
+        av_x = round(mean(list_x), 2)
+        av_y = round(mean(list_y), 2)
+        # write into csv file
         write_csv(av_x, av_y, curtime)
+        # initialize lists
         list_x = []
         list_y = []
 
-    # write_csv(gaze_point_x, gaze_point_y, curtime)
+    read_std_csv()
 
     if cv2.waitKey(1) == 27:
         break
