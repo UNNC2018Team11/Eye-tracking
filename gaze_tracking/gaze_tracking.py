@@ -62,34 +62,46 @@ class GazeTracking(object):
         self.frame = frame
         self._analyze()
 
-    def left_gaze(self):
-        if self.pupils_located:
-            x = round(1920 / self.eye_left.eye_weight * self.eye_left.pupil.x, 2)
-            y = round(1080 / self.eye_left.eye_height * self.eye_left.pupil.y, 2)
-            return (x, y)
-
     def left_gaze_x(self):
+        """
+        Calculate the x coordinate of the gazing point of left pupil
+
+        Returns:
+            the x coordinate of the gazing point of left pupil
+        """
         if self.pupils_located:
             x = round(1920 / self.eye_left.eye_weight * self.eye_left.pupil.x, 2)
             return x
 
     def left_gaze_y(self):
+        """
+        Calculate the y coordinate of the gazing point of left pupil
+
+        Returns:
+            the y coordinate of the gazing point of left pupil
+        """
         if self.pupils_located:
             y = round(1080 / self.eye_left.eye_height * self.eye_left.pupil.y, 2)
             return y
 
-    # def right_gaze(self):
-    #     if self.pupils_located:
-    #         x = round(1920 / self.eye_right.eye_weight * self.eye_right.pupil.x, 2)
-    #         y = round(1080 / self.eye_right.eye_height * self.eye_right.pupil.y, 2)
-    #         return (x, y)
-
     def right_gaze_x(self):
+        """
+        Calculate the x coordinate of the gazing point of right pupil
+
+        Returns:
+            the x coordinate of the gazing point of right pupil
+        """
         if self.pupils_located:
             x = round(1920 / self.eye_right.eye_weight * self.eye_right.pupil.x, 2)
             return x
 
     def right_gaze_y(self):
+        """
+        Calculate the y coordinate of the gazing point of right pupil
+
+        Returns:
+            the y coordinate of the gazing point of right pupil
+        """
         if self.pupils_located:
             y = round(1080 / self.eye_right.eye_height * self.eye_right.pupil.y, 2)
             return y
@@ -97,8 +109,6 @@ class GazeTracking(object):
     def pupil_left_coords(self):
         """Returns the coordinates of the left pupil"""
         if self.pupils_located:
-            # x = self.eye_left.origin[0] + self.eye_left.pupil.x
-            # y = self.eye_left.origin[1] + self.eye_left.pupil.y
             x = self.eye_left.pupil.x
             y = self.eye_left.pupil.y
             return (x, y)
@@ -106,52 +116,9 @@ class GazeTracking(object):
     def pupil_right_coords(self):
         """Returns the coordinates of the right pupil"""
         if self.pupils_located:
-            # x = self.eye_right.origin[0] + self.eye_right.pupil.x
-            # y = self.eye_right.origin[1] + self.eye_right.pupil.y
             x = self.eye_right.pupil.x
             y = self.eye_right.pupil.y
             return (x, y)
-
-    def horizontal_ratio(self):
-        """Returns a number between 0.0 and 1.0 that indicates the
-        horizontal direction of the gaze. The extreme right is 0.0,
-        the center is 0.5 and the extreme left is 1.0
-        """
-        if self.pupils_located:
-            pupil_left = self.eye_left.pupil.x / (self.eye_left.center[0] * 2 - 10)
-            pupil_right = self.eye_right.pupil.x / (self.eye_right.center[0] * 2 - 10)
-            return (pupil_left + pupil_right) / 2
-
-    def vertical_ratio(self):
-        """Returns a number between 0.0 and 1.0 that indicates the
-        vertical direction of the gaze. The extreme top is 0.0,
-        the center is 0.5 and the extreme bottom is 1.0
-        """
-        if self.pupils_located:
-            pupil_left = self.eye_left.pupil.y / (self.eye_left.center[1] * 2 - 10)
-            pupil_right = self.eye_right.pupil.y / (self.eye_right.center[1] * 2 - 10)
-            return (pupil_left + pupil_right) / 2
-
-    def is_right(self):
-        """Returns true if the user is looking to the right 0.35"""
-        if self.pupils_located:
-            return self.horizontal_ratio() <= 0.5
-
-    def is_left(self):
-        """Returns true if the user is looking to the left"""
-        if self.pupils_located:
-            return self.horizontal_ratio() >= 0.65
-
-    def is_center(self):
-        """Returns true if the user is looking to the center"""
-        if self.pupils_located:
-            return self.is_right() is not True and self.is_left() is not True
-
-    def is_blinking(self):
-        """Returns true if the user closes his eyes"""
-        if self.pupils_located:
-            blinking_ratio = (self.eye_left.blinking + self.eye_right.blinking) / 2
-            return blinking_ratio > 3.8
 
     def annotated_frame(self):
         """Returns the main frame with pupils highlighted"""
@@ -159,10 +126,8 @@ class GazeTracking(object):
 
         if self.pupils_located:
             color = (0, 255, 0)
-            # x_left, y_left = self.pupil_left_coords()
             x_left, y_left = self.eye_left.origin[0] + self.eye_left.pupil.x, self.eye_left.origin[
                 1] + self.eye_left.pupil.y
-            # x_right, y_right = self.pupil_right_coords()
             x_right, y_right = self.eye_right.origin[0] + self.eye_right.pupil.x, self.eye_right.origin[
                 1] + self.eye_right.pupil.y
             cv2.line(frame, (x_left - 5, y_left), (x_left + 5, y_left), color)
@@ -170,13 +135,11 @@ class GazeTracking(object):
             cv2.line(frame, (x_right - 5, y_right), (x_right + 5, y_right), color)
             cv2.line(frame, (x_right, y_right - 5), (x_right, y_right + 5), color)
 
-            (x_point, y_point) = self.left_gaze()
+            x_point = (self.left_gaze_x() + self.right_gaze_x())/2
+            y_point = (self.left_gaze_y() + self.right_gaze_y())/2
             x_point = int(x_point / 4)
             y_point = int(460 - y_point / 4)
             cv2.line(frame, (x_point - 5, y_point), (x_point + 5, y_point), (0, 255, 255))
             cv2.line(frame, (x_point, y_point - 5), (x_point, y_point + 5), (0, 255, 255))
-
-            cv2.line(frame, (635, 460), (640, 460), (255, 255, 255))
-            cv2.line(frame, (640, 455), (640, 465), (255, 255, 255))
 
         return frame

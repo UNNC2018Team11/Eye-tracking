@@ -64,47 +64,37 @@ class Eye(object):
         height, width = self.frame.shape[:2]
         self.center = (width / 2, height / 2)
 
-    def _blinking_ratio(self, landmarks, points):
-        """Calculates a ratio that can indicate whether an eye is closed or not.
-        It's the division of the width of the eye, by its height.
+    def _show_eye_width(self, landmarks, points):
+        """
+        According to the left point and right point of eye,
+        calculate the width of eye
 
         Arguments:
             landmarks (dlib.full_object_detection): Facial landmarks for the face region
             points (list): Points of an eye (from the 68 Multi-PIE landmarks)
 
         Returns:
-            The computed ratio
+            the width of eye
         """
-        # left = ((landmarks.part(points[0]).x)+3, landmarks.part(points[0]).y)
-        # right = ((landmarks.part(points[3]).x)-3, landmarks.part(points[3]).y)
-        left = ((landmarks.part(points[0]).x) - 2.6, landmarks.part(points[0]).y - 0.2)
-        right = ((landmarks.part(points[3]).x) + 2.6, landmarks.part(points[3]).y + 0.2)
-        top = self._middle_point(landmarks.part(points[1]), landmarks.part(points[2]))
-        bottom = self._middle_point(landmarks.part(points[5]), landmarks.part(points[4]))
-
-        eye_width = math.hypot((left[0] - right[0]), (left[1] - right[1]))
-        eye_height = math.hypot((top[0] - bottom[0]), (top[1] - bottom[1]))
-
-        try:
-            ratio = eye_width / eye_height
-        except ZeroDivisionError:
-            ratio = None
-
-        return ratio
-
-    def _show_eye_width(self, landmarks, points):
-        left = ((landmarks.part(points[0]).x)+3, landmarks.part(points[0]).y)
-        right = ((landmarks.part(points[3]).x)-3, landmarks.part(points[3]).y)
-        top = self._middle_point(landmarks.part(points[1]), landmarks.part(points[2]))
-        bottom = self._middle_point(landmarks.part(points[5]), landmarks.part(points[4]))
+        left = ((landmarks.part(points[0]).x) + 3, landmarks.part(points[0]).y)
+        right = ((landmarks.part(points[3]).x) - 3, landmarks.part(points[3]).y)
 
         eye_width = math.hypot((left[0] - right[0]), (left[1] - right[1]))
 
         return eye_width
 
     def _show_eye_height(self, landmarks, points):
-        left = (landmarks.part(points[0]).x + 3, landmarks.part(points[0]).y)
-        right = (landmarks.part(points[3]).x - 3, landmarks.part(points[3]).y)
+        """
+        According to the top point and bottom point of eye,
+        calculate the height of eye
+
+        Arguments:
+            landmarks (dlib.full_object_detection): Facial landmarks for the face region
+            points (list): Points of an eye (from the 68 Multi-PIE landmarks)
+
+        Returns:
+            the height of eye
+        """
         top = self._middle_point(landmarks.part(points[1]), landmarks.part(points[2]))
         bottom = self._middle_point(landmarks.part(points[5]), landmarks.part(points[4]))
 
@@ -129,7 +119,6 @@ class Eye(object):
         else:
             return
 
-        self.blinking = self._blinking_ratio(landmarks, points)
         self.eye_height = self._show_eye_height(landmarks, points)
         self.eye_weight = self._show_eye_width(landmarks, points)
 
