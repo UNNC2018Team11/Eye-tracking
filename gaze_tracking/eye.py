@@ -31,7 +31,7 @@ class Eye(object):
         """
         x = int((p1.x + p2.x) / 2)
         y = int((p1.y + p2.y) / 2)
-        return (x, y)
+        return (x , y-0.5)
 
     @staticmethod
     def _bottonMiddle_point(p1, p2):
@@ -43,7 +43,7 @@ class Eye(object):
         """
         x = int((p1.x + p2.x) / 2)
         y = int((p1.y + p2.y) / 2)
-        return (x, y)
+        return (x, y-0.5)
 
     def _isolate(self, frame, landmarks, points):
         """Isolate an eye, to have a frame without other part of the face.
@@ -105,16 +105,13 @@ class Eye(object):
     def _show_eye_width(self, landmarks, points):
         left = ((landmarks.part(points[0]).x)-2.6, landmarks.part(points[0]).y-0.2)
         right = ((landmarks.part(points[3]).x)+2.6, landmarks.part(points[3]).y+0.2)
-        top = self._topMiddle_point(landmarks.part(points[1]), landmarks.part(points[2]))
-        bottom = self._bottonMiddle_point(landmarks.part(points[5]), landmarks.part(points[4]))
 
         eye_width = math.hypot((left[0] - right[0]), (left[1] - right[1]))
 
         return eye_width
 
     def _show_eye_height(self, landmarks, points):
-        left = (landmarks.part(points[0]).x, landmarks.part(points[0]).y)
-        right = (landmarks.part(points[3]).x, landmarks.part(points[3]).y)
+
         top = self._topMiddle_point(landmarks.part(points[1]), landmarks.part(points[2]))
         bottom = self._bottonMiddle_point(landmarks.part(points[5]), landmarks.part(points[4]))
 

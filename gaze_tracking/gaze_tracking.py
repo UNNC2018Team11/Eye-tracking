@@ -78,11 +78,11 @@ class GazeTracking(object):
             y = round(1080 / self.eye_left.eye_height * self.eye_left.pupil.y, 2)
             return y
 
-    # def right_gaze(self):
-    #     if self.pupils_located:
-    #         x = round(1920 / self.eye_right.eye_weight * self.eye_right.pupil.x, 2)
-    #         y = round(1080 / self.eye_right.eye_height * self.eye_right.pupil.y, 2)
-    #         return (x, y)
+    def right_gaze(self):
+        if self.pupils_located:
+            x = round(1920 / self.eye_right.eye_weight * self.eye_right.pupil.x, 2)
+            y = round(1080 / self.eye_right.eye_height * self.eye_right.pupil.y, 2)
+            return (x, y)
 
     def right_gaze_x(self):
         if self.pupils_located:
@@ -170,9 +170,21 @@ class GazeTracking(object):
             cv2.line(frame, (x_right - 5, y_right), (x_right + 5, y_right), color)
             cv2.line(frame, (x_right, y_right - 5), (x_right, y_right + 5), color)
 
-            (x_point, y_point) = self.left_gaze()
-            x_point = int(x_point / 4)
-            y_point = int(460 - y_point / 4)
+            (left_x_point, left_y_point) = self.left_gaze()
+            (right_x_point, right_y_point) = self.right_gaze()
+            if self.is_left():
+                x_point = int(left_x_point / 4)
+                y_point = int(400 - left_y_point / 4)
+            else:
+                if self.is_right():
+                    x_point = int(right_x_point / 4)
+                    y_point = int(400 - right_y_point / 4)
+                else:
+                    if self.is_center():
+                        x_point = int(left_x_point + right_x_point/ 4)
+                        y_point = int(400 - (left_y_point + right_y_point)/ 8)
+
+
             cv2.line(frame, (x_point - 5, y_point), (x_point + 5, y_point), (0, 255, 255))
             cv2.line(frame, (x_point, y_point - 5), (x_point, y_point + 5), (0, 255, 255))
 
