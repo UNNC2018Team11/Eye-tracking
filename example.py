@@ -62,6 +62,10 @@ def read_std_csv():
 
 def write_std(x_std, y_std):
     """
+    write std of x and y into csv file
+    Arguments:
+        x_std: standard deviation of x coordinates
+        y_std: standard deviation of y coordinates
     """
     path = "std.csv"
     with open(path, 'w', newline='') as f:
@@ -71,6 +75,13 @@ def write_std(x_std, y_std):
 
 
 def write_csv(point_x, point_y, currenttime):
+    '''
+    write x, y coordinates of gazing points and time into csv file
+    Arguments:
+        point_x: x coordinate of gazing point
+        point_y: y coordinate of gazing point
+        currenttime: time
+    '''
     path = "coor.csv"
     with open(path, 'a+', newline='') as f:
         csv_write = csv.writer(f, lineterminator='\n')
