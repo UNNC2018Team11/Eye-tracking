@@ -45,7 +45,7 @@ def countPoints(point_x, point_y):
             csv_write.writerow(data_row)
 
 
-def read_std_csv():
+def rw_csv():
     """
     read 'coor.csv' which contains the coordinates of all the gazing points
     calculate the standard deviation and write std into another csv file
@@ -57,10 +57,14 @@ def read_std_csv():
             all_y.append(float(i[1]))
     x_std = np.std(all_x)
     y_std = np.std(all_y)
-    write_std(x_std, y_std)
+    x_max = max(all_x)
+    y_max = max(all_y)
+    x_min = min(all_x)
+    y_min = min(all_y)
+    write_std(x_std, y_std, x_max, y_max, x_min, y_min)
 
 
-def write_std(x_std, y_std):
+def write_std(x_std, y_std, x_max, y_max, x_min, y_min):
     """
     write std of x and y into csv file
     Arguments:
@@ -70,18 +74,18 @@ def write_std(x_std, y_std):
     path = "std.csv"
     with open(path, 'w', newline='') as f:
         csv_write = csv.writer(f, lineterminator='\n')
-        data_row = [x_std, y_std]
+        data_row = [x_std, y_std, x_max, y_max, x_min, y_min]
         csv_write.writerow(data_row)
 
 
 def write_csv(point_x, point_y, currenttime):
-    '''
+    """
     write x, y coordinates of gazing points and time into csv file
     Arguments:
         point_x: x coordinate of gazing point
         point_y: y coordinate of gazing point
         currenttime: time
-    '''
+    """
     path = "coor.csv"
     with open(path, 'a+', newline='') as f:
         csv_write = csv.writer(f, lineterminator='\n')
@@ -106,11 +110,6 @@ while True:
         gaze_point_x = (gaze.left_gaze_x() + gaze.right_gaze_x()) / 2
         gaze_point_y = (gaze.left_gaze_y() + gaze.right_gaze_y()) / 2
 
-    # # create a new window
-    # cv2.namedWindow("Demo", 0)
-    # cv2.resizeWindow("Demo", 1920, 1080)
-    # cv2.imshow("Demo", frame)
-
     # get the current time
     curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
 
@@ -131,7 +130,7 @@ while True:
         list_y = []
 
     # calculate standard deviation and write into a csv file
-    read_std_csv()
+    rw_csv()
 
     if cv2.waitKey(1) == 27:
         break
