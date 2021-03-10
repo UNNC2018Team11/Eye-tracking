@@ -26,7 +26,7 @@ all_y = []
 watchingTime = [[0] * 24 for i in range(10)]
 
 
-def countPoints(point_x, point_y):
+def count_points(point_x, point_y):
     """
     show the times that gazing points are located in different area
     the screen is divided into 9x24 areas
@@ -124,7 +124,7 @@ while True:
         # write into csv file
         write_csv(av_x, av_y, curtime)
         # count the times of gazing on different area
-        countPoints(av_x, av_y)
+        count_points(av_x, av_y)
         # initialize lists
         list_x = []
         list_y = []
