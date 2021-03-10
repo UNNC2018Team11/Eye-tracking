@@ -1,3 +1,8 @@
+"""
+Demonstration of the GazeTracking library.
+Check the README.md for complete documentation.
+"""
+
 import csv
 import time
 
@@ -18,22 +23,21 @@ list_x = []
 list_y = []
 all_x = []
 all_y = []
-watchingTime = [[0] * 24 for i in range(9)]
+watchingTime = [[0] * 24 for i in range(10)]
 
 
 def countPoints(point_x, point_y):
     """
     show the times that gazing points are located in different area
     the screen is divided into 9x24 areas
-
     Arguments:
         point_x: x coordinate of gazing point
         point_y: y coordinate of gazing point
     """
     if point_x is not None and point_y is not None:
-        a = (int)(9 - point_x / 190)
-        b = (int)(point_x / 120)
-        watchingTime[a][b] = watchingTime[a][b] + 1
+        a = (int)(point_x / 100)
+        b = (int)(10 - point_y / 120)
+        watchingTime[b][a] = watchingTime[b][a] + 1
         path = "count.csv"
         with open(path, 'w', newline='') as f:
             csv_write = csv.writer(f, lineterminator='\n')
@@ -58,7 +62,10 @@ def read_std_csv():
 
 def write_std(x_std, y_std):
     """
-
+    write std of x and y into csv file
+    Arguments:
+        x_std: standard deviation of x coordinates
+        y_std: standard deviation of y coordinates
     """
     path = "std.csv"
     with open(path, 'w', newline='') as f:
@@ -68,6 +75,13 @@ def write_std(x_std, y_std):
 
 
 def write_csv(point_x, point_y, currenttime):
+    '''
+    write x, y coordinates of gazing points and time into csv file
+    Arguments:
+        point_x: x coordinate of gazing point
+        point_y: y coordinate of gazing point
+        currenttime: time
+    '''
     path = "coor.csv"
     with open(path, 'a+', newline='') as f:
         csv_write = csv.writer(f, lineterminator='\n')
@@ -92,10 +106,10 @@ while True:
         gaze_point_x = (gaze.left_gaze_x() + gaze.right_gaze_x()) / 2
         gaze_point_y = (gaze.left_gaze_y() + gaze.right_gaze_y()) / 2
 
-    # create a new window
-    cv2.namedWindow("Demo", 0)
-    cv2.resizeWindow("Demo", 1920, 1080)
-    cv2.imshow("Demo", frame)
+    # # create a new window
+    # cv2.namedWindow("Demo", 0)
+    # cv2.resizeWindow("Demo", 1920, 1080)
+    # cv2.imshow("Demo", frame)
 
     # get the current time
     curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
