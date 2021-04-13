@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- thumbnail card -->
-    <v-card class="elevation-1" dark height="300" @click="dialog = true">
+    <v-card class="elevation-1" color="#2a2a2e" height="300" @click="dialog = true">
       <v-img class="" height="200px" :src.sync="thumbnail"> </v-img>
       <v-card-title class="mt-4">
         {{ name }}
@@ -108,7 +108,11 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions class="justify-space-between mt-4">
-          <v-btn color="primary" text @click="saveRecord">
+          <v-btn
+            color="primary"
+            text
+            @click="showChart(false, false, generatedFile)"
+          >
             Rate Now
           </v-btn>
           <v-btn text @click="rateDialog = false">
@@ -158,6 +162,8 @@ export default {
         { text: '', value: 'data-table-expand' },
       ],
       items: [],
+
+      generatedFile: '',
     }
   },
 
@@ -183,6 +189,7 @@ export default {
       this.eventBus.$emit('startProgress')
       // listen to ipcMain event
       this.$electron.ipcRenderer.on('success' + this.name, (event, score) => {
+        this.saveRecord()
         this.loading = false
         this.eventBus.$emit('finishProgress')
         this.score = score
@@ -258,22 +265,34 @@ export default {
       // generate unique filename
       let fileName = this.name + Date.now()
       fileName = fileName.replace(/\s*/g, '')
+      this.generatedFile = fileName
       // listen to ipcMain event
-      this.$electron.ipcRenderer.on('renamed' + fileName, () => {
-        insertRecord({
-          uid: '',
-          user: localStorage.getItem('userName'),
-          simulation: this.name,
-          visualization: fileName,
-          userScore: this.rating,
-          calculatedScore: this.score,
-          date: format(new Date(), 'YYYY-MM-DD hh:mm:ss'),
-        })
-        this.eventBus.$emit('newRecord')
-        this.eventBus.$emit('updateRecord')
-        this.showChart(false, false, fileName)
+      // this.$electron.ipcRenderer.on('renamed' + fileName, () => {
+      //   insertRecord({
+      //     uid: '',
+      //     user: localStorage.getItem('userName'),
+      //     simulation: this.name,
+      //     visualization: fileName,
+      //     userScore: this.rating,
+      //     calculatedScore: this.score,
+      //     date: format(new Date(), 'YYYY-MM-DD hh:mm:ss'),
+      //   })
+      //   this.eventBus.$emit('newRecord')
+      //   this.eventBus.$emit('updateRecord')
+      //   this.showChart(false, false, fileName)
+      // })
+      this.$electron.ipcRenderer.sendSync('rename', fileName)
+      await insertRecord({
+        uid: '',
+        user: localStorage.getItem('userName'),
+        simulation: this.name,
+        visualization: fileName,
+        userScore: this.rating,
+        calculatedScore: this.score,
+        date: format(new Date(), 'YYYY-MM-DD hh:mm:ss'),
       })
-      this.$electron.ipcRenderer.send('rename', fileName)
+      this.eventBus.$emit('newRecord')
+      this.eventBus.$emit('updateRecord')
     },
 
     /**

@@ -12,7 +12,7 @@
     </v-col>
     <!-- user score -->
     <v-col cols="6" class="d-flex justify-center">
-      <v-card class="pa-4 overflow-hidden elevation-1" max-height="700">
+      <v-card class="pa-4 overflow-hidden elevation-1" max-height="700" color="#2a2a2e">
         <v-card-text>
           <p class="display-1 primary--text font-weight-bold">
             User Score
@@ -30,7 +30,7 @@
     </v-col>
     <!-- calculated score -->
     <v-col cols="6" class="d-flex justify-center">
-      <v-card class="pa-4 overflow-hidden elevation-1" max-height="700">
+      <v-card class="pa-4 overflow-hidden elevation-1" max-height="700" color="#2a2a2e">
         <v-card-text>
           <p class="display-1 primary--text font-weight-bold">
             Calculated Score
@@ -48,7 +48,7 @@
     </v-col>
     <!-- heatmap -->
     <v-col cols="12" class="d-flex justify-center">
-      <v-card class="pa-4 overflow-hidden elevation-1" max-height="900">
+      <v-card class="pa-4 overflow-hidden elevation-1" max-height="900" color="#2a2a2e">
         <v-card-text>
           <p class="display-1 primary--text font-weight-bold">
             Heatmap of Eye Movements

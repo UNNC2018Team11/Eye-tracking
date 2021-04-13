@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="600px">
-    <v-card class="pa-6">
+    <v-card class="pa-6" color="#2a2a2e">
       <v-card-title>
         <span class="headline">Logout</span>
       </v-card-title>

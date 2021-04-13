@@ -2,14 +2,14 @@
   <v-app>
     <Navbar app />
     <!-- Sizes your content based upon application components -->
-    <v-main>
+    <v-main class="background-pattern">
       <!-- <scrollbar> -->
-        <!-- Provides the application the proper gutter -->
-        <v-container class="mt-16">
-          <keep-alive>
-            <router-view></router-view>
-          </keep-alive>
-        </v-container>
+      <!-- Provides the application the proper gutter -->
+      <v-container class="mt-16">
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
+      </v-container>
       <!-- </scrollbar> -->
     </v-main>
   </v-app>
@@ -105,5 +105,24 @@ export default {
 * {
   scroll-behavior: smooth;
   user-select: none;
+}
+
+.background-pattern {
+  background: linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+    linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+    linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+    linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+    linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+    linear-gradient(
+      #1d1d1d 20%,
+      #1a1a1a 20%,
+      #1a1a1a 40%,
+      transparent 40%,
+      transparent 70%,
+      #242424 70%,
+      #242424
+    );
+  background-color: #131313;
+  background-size: 20px 20px;
 }
 </style>

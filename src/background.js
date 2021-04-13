@@ -398,7 +398,7 @@ function renameFile(event, name) {
   }
 
   fs.renameSync(oldPath, newPath)
-  event.reply('renamed' + name)
+  event.returnValue = 'renamed' + name
 
   // fs.readdir(dir, (err, files) => {
   //   files.forEach((value) => {

@@ -15,7 +15,7 @@
     </v-badge>
     <!-- upload dialog -->
     <v-dialog v-model="dialogUpload" max-width="500" persistent>
-      <v-card>
+      <v-card color="#2a2a2e">
         <v-card-title class="headline">
           Upload the local records?
         </v-card-title>
@@ -39,7 +39,7 @@
     </v-dialog>
     <!-- download dialog -->
     <v-dialog v-model="dialogDownload" max-width="500" persistent>
-      <v-card>
+      <v-card color="#2a2a2e">
         <v-card-title class="headline">
           Download the records from cloud?
         </v-card-title>

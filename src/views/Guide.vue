@@ -12,15 +12,15 @@
     </v-col>
     <!-- card list -->
     <v-col cols="12" class="px-16 d-flex flex-column">
-      <v-card class="elevation-1 pa-8 my-8" dark>
+      <v-card class="elevation-1 pa-8 my-8" dark color="#2a2a2e">
         <h2 class="mb-8">Login</h2>
         <v-img :src.sync="login"> </v-img>
       </v-card>
-      <v-card class="elevation-1 pa-8 my-8" dark>
+      <v-card class="elevation-1 pa-8 my-8" dark color="#2a2a2e">
         <h2 class="mb-8">Logout</h2>
         <v-img :src.sync="logout"> </v-img>
       </v-card>
-      <v-card class="elevation-1 pa-8 my-8" dark>
+      <v-card class="elevation-1 pa-8 my-8" dark color="#2a2a2e">
         <h2 class="mb-8">Sign up</h2>
         <p>click <strong>reset form</strong> to clear input content</p>
         <p class="mb-8">
@@ -29,7 +29,7 @@
         </p>
         <v-img :src.sync="signup"> </v-img>
       </v-card>
-      <v-card class="elevation-1 pa-8 my-8" dark>
+      <v-card class="elevation-1 pa-8 my-8" dark color="#2a2a2e">
         <h2 class="mb-8">Procedure of watching a simulation</h2>
         <v-stepper class="mb-8" non-linear>
           <v-stepper-header>
@@ -56,22 +56,22 @@
         </v-stepper>
         <v-img :src.sync="watch"> </v-img>
       </v-card>
-      <v-card class="elevation-1 pa-8 my-8" dark>
+      <v-card class="elevation-1 pa-8 my-8" dark color="#2a2a2e">
         <h2 class="mb-8">View records in a simulation card</h2>
         <v-img :src.sync="card"> </v-img>
       </v-card>
-      <v-card class="elevation-1 pa-8 my-8" dark>
+      <v-card class="elevation-1 pa-8 my-8" dark color="#2a2a2e">
         <h2 class="mb-8">View records of watching history</h2>
         <v-img :src.sync="record"> </v-img>
       </v-card>
-      <v-card class="elevation-1 pa-8 my-8" dark>
+      <v-card class="elevation-1 pa-8 my-8" dark color="#2a2a2e">
         <h2 class="mb-8">Download records from cloud storage</h2>
         <v-alert dense text type="warning" class="mb-8">
           Users can download records only after login
         </v-alert>
         <v-img :src.sync="download"> </v-img>
       </v-card>
-      <v-card class="elevation-1 pa-8 my-8" dark>
+      <v-card class="elevation-1 pa-8 my-8" dark color="#2a2a2e">
         <h2 class="mb-8">Upload records to cloud storage</h2>
         <v-alert dense text type="warning" class="mb-8">
           Users can upload records only after login
