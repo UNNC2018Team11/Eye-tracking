@@ -236,7 +236,7 @@ function downloadMapFile(event, url, fileName) {
  * @param {*} event
  * @param {String} source the simulation to play
  */
-function playSimulation(event, source) {
+function playSimulation(event, source, file) {
   let simulation
   switch (source) {
     case 'Air Defense':
@@ -318,7 +318,10 @@ function playSimulation(event, source) {
   // read calculated score
   let score = fs.readFileSync(filePath)
 
+  renameFile('', file)
+
   event.reply('success' + source, score * 1)
+  // event.returnValue = score * 1
 }
 
 /**
@@ -379,9 +382,9 @@ function renameFile(event, name) {
   let newPath = path.join(dir, name + 'STD' + '.csv')
 
   if (!fs.existsSync(oldPath)) {
-    console.log('csv文件不存在')
-    event.reply('renamed' + name)
-    event.reply('error', 'Necessary file cannot be found')
+    console.log('csv文件不存在') 
+    ipcMain.emit('error', 'Necessary file cannot be found')
+    // event.reply('error', 'Necessary file cannot be found')
     return
   }
 
@@ -392,13 +395,13 @@ function renameFile(event, name) {
 
   if (!fs.existsSync(oldPath)) {
     console.log('csv文件不存在')
-    event.reply('renamed' + name)
-    event.reply('error', 'Necessary file cannot be found')
+    ipcMain.emit('error', 'Necessary file cannot be found')
+    // event.reply('error', 'Necessary file cannot be found')
     return
   }
 
   fs.renameSync(oldPath, newPath)
-  event.returnValue = 'renamed' + name
+  // event.returnValue = 'renamed' + name
 
   // fs.readdir(dir, (err, files) => {
   //   files.forEach((value) => {
@@ -440,7 +443,7 @@ function copyMapFile(event, file) {
     console.log('csv文件不存在')
     event.reply('error', 'Map file cannot be found')
     return
-  }
+  } 
 
   // event.reply('mapCopied' + file, path.resolve(filePath))
 

@@ -1,7 +1,12 @@
 <template>
   <div>
     <!-- thumbnail card -->
-    <v-card class="elevation-1" color="#2a2a2e" height="300" @click="dialog = true">
+    <v-card
+      class="elevation-1"
+      color="#2a2a2e"
+      height="300"
+      @click="dialog = true"
+    >
       <v-img class="" height="200px" :src.sync="thumbnail"> </v-img>
       <v-card-title class="mt-4">
         {{ name }}
@@ -195,7 +200,10 @@ export default {
         this.score = score
         this.rateDialog = true
       })
-      this.$electron.ipcRenderer.send('play', this.name)
+      let fileName = this.name + Date.now()
+      fileName = fileName.replace(/\s*/g, '')
+      this.generatedFile = fileName
+      this.$electron.ipcRenderer.send('play', this.name, fileName)
 
       // this.$electron.ipcRenderer.send(
       //   'download',
@@ -263,9 +271,9 @@ export default {
 
     async saveRecord() {
       // generate unique filename
-      let fileName = this.name + Date.now()
-      fileName = fileName.replace(/\s*/g, '')
-      this.generatedFile = fileName
+      // let fileName = this.name + Date.now()
+      // fileName = fileName.replace(/\s*/g, '')
+      // this.generatedFile = fileName
       // listen to ipcMain event
       // this.$electron.ipcRenderer.on('renamed' + fileName, () => {
       //   insertRecord({
@@ -281,7 +289,7 @@ export default {
       //   this.eventBus.$emit('updateRecord')
       //   this.showChart(false, false, fileName)
       // })
-      this.$electron.ipcRenderer.sendSync('rename', fileName)
+      // this.$electron.ipcRenderer.sendSync('rename', fileName)
       await insertRecord({
         uid: '',
         user: localStorage.getItem('userName'),
